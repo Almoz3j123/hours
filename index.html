@@ -1,0 +1,91 @@
+<?php
+session_start();
+
+// تحقق مما إذا كان المستخدم مسجل الدخول بالفعل
+if (isset($_SESSION['username'])) {
+    header('Location: dashboard.php'); // إعادة توجيه إلى لوحة التحكم إذا كان مسجل الدخول
+    exit;
+}
+
+// تحقق من بيانات تسجيل الدخول
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    // هنا يمكنك التحقق من بيانات المستخدمين من قاعدة البيانات بدلاً من هذه القيم الثابتة
+    $valid_username = 'admin';
+    $valid_password = '123456';
+
+    if ($username == $valid_username && $password == $valid_password) {
+        $_SESSION['username'] = $username;
+        header('Location: dashboard.php'); // توجيه المستخدم إلى لوحة التحكم
+        exit;
+    } else {
+        $error = "اسم المستخدم أو كلمة المرور غير صحيحة.";
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        .login-container {
+            width: 300px;
+            margin: 100px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .error {
+            color: red;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <h2>تسجيل الدخول</h2>
+
+    <?php if (isset($error)): ?>
+        <p class="error"><?= $error ?></p>
+    <?php endif; ?>
+
+    <form method="POST" action="">
+        <input type="text" name="username" placeholder="اسم المستخدم" required>
+        <input type="password" name="password" placeholder="كلمة المرور" required>
+        <button type="submit">دخول</button>
+    </form>
+</div>
+
+</body>
+</html>
